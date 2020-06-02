@@ -20,7 +20,7 @@ class PointsController {
     return response.json(points);
   }
 
-  async show(request: Request, reponse: Response) {
+  async show(request: Request, response: Response) {
     const { id } = request.params;
 
     const point = await knex('points').where('id', id).first();
@@ -29,13 +29,12 @@ class PointsController {
       return response.status(400).json({ message: 'Point not found' });
     }
 
-
     const items = await knex('items')
       .join('point_items', 'items.id', '=', 'point_items.item_id')
       .where('point_items.point_id', id)
       .select('items.title');
 
-    return reponse.json({ point, items });
+    return response.json({ point, items });
   }
 
   async create(request: Request, response: Response) {
@@ -49,11 +48,12 @@ class PointsController {
       uf,
       items,
     } = request.body;
-  
+
     const trx = await knex.transaction();
 
     const point = {
-      image: 'https://images.unsplash.com/photo-1556767576-5ec41e3239ea?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
+      image:
+        'https://images.unsplash.com/photo-1556767576-5ec41e3239ea?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
       name,
       email,
       whatsapp,
@@ -61,23 +61,23 @@ class PointsController {
       longitude,
       city,
       uf,
-    }
-  
+    };
+
     const insertedIds = await trx('points').insert(point);
-  
-    const point_id = insertedIds[0]
-  
+
+    const point_id = insertedIds[0];
+
     const pointItems = items.map((item_id: number) => {
       return {
         item_id,
         point_id,
-      }
+      };
     });
-  
+
     await trx('point_items').insert(pointItems);
 
     await trx.commit();
-  
+
     return response.json({
       id: point_id,
       ...point,
