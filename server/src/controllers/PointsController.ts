@@ -1,4 +1,5 @@
-import { Request, Response, response } from 'express';
+/* eslint-disable camelcase */
+import { Request, Response } from 'express';
 import knex from '../database/connections';
 
 class PointsController {
