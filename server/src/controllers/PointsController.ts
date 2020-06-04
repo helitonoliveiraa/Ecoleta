@@ -1,6 +1,18 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable camelcase */
 import { Request, Response } from 'express';
 import knex from '../database/connections';
+
+interface CreateItems {
+  name: string;
+  email: string;
+  whatsapp: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  uf: string;
+  items: string[];
+}
 
 class PointsController {
   async index(request: Request, response: Response) {
