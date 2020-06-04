@@ -1,11 +1,14 @@
+/* eslint-disable no-shadow */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import axios from 'axios';
-
+import { LeafletMouseEvent } from 'leaflet';
 import api from '../../services/api';
 // import MapComponent from '../../map/map';
 
@@ -31,7 +34,34 @@ const CreatePoint: React.FC = () => {
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
 
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0,
+    0,
+  ]);
+
+  const [inputData, setInputData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+  });
+
   const [selectedUf, setSelectedUf] = useState('0');
+  const [selectedCity, setSelectedCity] = useState('0');
+  const [selectedItems, setSelectedIems] = useState<number[]>([]);
+  const [selectedPosition, setSelectedPosition] = useState<[number, number]>([
+    0,
+    0,
+  ]);
+
+  const histoty = useHistory();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords;
+
+      setInitialPosition([latitude, longitude]);
+    });
+  }, []);
 
   useEffect(() => {
     api.get('items').then(response => {
@@ -74,6 +104,64 @@ const CreatePoint: React.FC = () => {
     setSelectedUf(uf);
   }
 
+  function handleSelectCity(event: ChangeEvent<HTMLSelectElement>) {
+    const city = event.target.value;
+
+    setSelectedCity(city);
+  }
+
+  function handleMapClick(event: LeafletMouseEvent) {
+    setSelectedPosition([event.latlng.lat, event.latlng.lng]);
+  }
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+
+    setInputData({ ...inputData, [name]: value });
+  }
+
+  function handleSelectItem(id: number) {
+    const alreadySelected = selectedItems.findIndex(item => item === id);
+
+    if (alreadySelected >= 0) {
+      const filteredItems = selectedItems.filter(item => item !== id);
+
+      setSelectedIems(filteredItems);
+    } else {
+      setSelectedIems([...selectedItems, id]);
+    }
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    const { name, email, whatsapp } = inputData;
+    const uf = selectedUf;
+    const city = selectedCity;
+    const [latitude, longitude] = selectedPosition;
+    const items = selectedItems;
+
+    const data = {
+      name,
+      email,
+      whatsapp,
+      uf,
+      city,
+      latitude,
+      longitude,
+      items,
+    };
+
+    console.log(data);
+
+    // await api.post('points', data);
+
+    // eslint-disable-next-line no-alert
+    alert('ponto de coleta criado!');
+
+    histoty.push('/');
+  }
+
   return (
     <div id="page-create-point">
       <header>
@@ -84,7 +172,7 @@ const CreatePoint: React.FC = () => {
         </Link>
       </header>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>Cadastro do ponto de coleta</h1>
 
         <fieldset>
@@ -94,18 +182,33 @@ const CreatePoint: React.FC = () => {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              onChange={handleInputChange}
+            />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <input type="text" name="email" id="email" />
+              <input
+                type="text"
+                name="email"
+                id="email"
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="field">
               <label htmlFor="whatsapp">Whatsapp</label>
-              <input type="text" name="whatsapp" id="whatsapp" />
+              <input
+                type="text"
+                name="whatsapp"
+                id="whatsapp"
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </fieldset>
@@ -116,13 +219,13 @@ const CreatePoint: React.FC = () => {
             <span>Selecione o endereço no mapa</span>
           </legend>
 
-          <Map center={[-22.701093, -43.531849]} zoom={13}>
+          <Map center={initialPosition} zoom={13} onClick={handleMapClick}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <Marker position={[-22.701093, -43.531849]} />
+            <Marker position={selectedPosition} />
           </Map>
 
           <div className="field-group">
@@ -145,7 +248,12 @@ const CreatePoint: React.FC = () => {
 
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city">
+              <select
+                name="city"
+                id="city"
+                value={selectedCity}
+                onChange={handleSelectCity}
+              >
                 <option value="0">Selecione uma Cidade</option>
                 {cities.map(city => (
                   <option key={city} value={city}>
@@ -165,7 +273,11 @@ const CreatePoint: React.FC = () => {
 
           <ul className="items-grid">
             {items.map(item => (
-              <li key={item.id}>
+              <li
+                key={item.id}
+                onClick={() => handleSelectItem(item.id)}
+                className={selectedItems.includes(item.id) ? 'selected' : ''}
+              >
                 <img src={item.image_url} alt={item.title} />
                 <span>{item.title}</span>
               </li>
@@ -173,7 +285,7 @@ const CreatePoint: React.FC = () => {
           </ul>
         </fieldset>
 
-        <button type="button">Cadastrar ponto de coleta</button>
+        <button type="submit">Cadastrar ponto de coleta</button>
       </form>
     </div>
   );
