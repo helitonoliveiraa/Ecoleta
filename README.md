@@ -1,8 +1,8 @@
-<h1>
-  <img src="./.github/banner.jpg" />
+<h1 align="center">
+  <img src="./.github/nlw.gif" width="200" />
 </h1>
 
-<h2 align="center">Aplicação em Desenvolvimento</h2>
+<h2 align="center">⚒️Aplicação em Desenvolvimento⚒️</h2>
 
 ### 📃 Sobre
 
