@@ -1,16 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter } from 'react-router-dom';
 
-function App() {
+import GlobalStyles from './styles/global';
+import './app.css';
+import Routes from './routes/index';
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Hellor World</h1>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
+
+      <GlobalStyles />
+    </>
   );
-}
+};
 
 export default App;
