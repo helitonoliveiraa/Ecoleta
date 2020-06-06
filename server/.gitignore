@@ -4,6 +4,7 @@ node_modules/
 build/
 temp/
 
-tmp/*
-!tmp/.gitkeep
+uploads/*
+!uploads/.gitkeep
 
+*.sqlite
