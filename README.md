@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./.github/nlw.gif" width="200" />
+  <img src="./.github/nlw.gif" width="300" />
 </h1>
 
 <h2 align="center">⚒️Aplicação em Desenvolvimento⚒️</h2>

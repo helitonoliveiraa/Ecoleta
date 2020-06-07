@@ -83,8 +83,8 @@ class PointsController {
       whatsapp,
       latitude,
       longitude,
-      city,
-      uf,
+      city: city.toUpperCase(),
+      uf: uf.toUpperCase(),
     };
 
     const insertedIds = await trx('points').insert(point);

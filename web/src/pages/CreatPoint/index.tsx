@@ -9,9 +9,10 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import axios from 'axios';
 import { LeafletMouseEvent } from 'leaflet';
-import api from '../../services/api';
-
+import swal from 'sweetalert';
 import Dropzone from '../../components/Dropzone';
+
+import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import './index.css';
@@ -158,12 +159,13 @@ const CreatePoint: React.FC = () => {
       data.append('image', selectedFile);
     }
 
-    console.log(data);
-
     await api.post('points', data);
 
-    // eslint-disable-next-line no-alert
-    alert('ponto de coleta criado!');
+    swal({
+      title: 'Concluido!',
+      text: 'Cadastro realizado com sucesso!',
+      icon: 'success',
+    });
 
     histoty.push('/');
   }
@@ -227,7 +229,7 @@ const CreatePoint: React.FC = () => {
             <span>Selecione o endereço no mapa</span>
           </legend>
 
-          <Map center={initialPosition} zoom={13} onClick={handleMapClick}>
+          <Map center={initialPosition} zoom={15} onClick={handleMapClick}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

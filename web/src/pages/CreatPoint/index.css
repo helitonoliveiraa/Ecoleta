@@ -24,7 +24,7 @@
 
 #page-create-point header a svg {
   margin-right: 16px;
-  color: var(--primary-color);
+  color:#4ecb79;
 }
 
 #page-create-point form {
@@ -156,12 +156,13 @@
   border: 0;
   align-self: flex-end;
   margin-top: 40px;
-  transition: background-color 0.2s;
+  transition: opacity 0.2s;
   cursor: pointer;
 }
 
 #page-create-point form button:hover {
-  background: #2FB86E;
+  /* background: #2FB86E; */
+  opacity: 0.88;
 }
 
 .items-grid {
@@ -188,6 +189,11 @@
   cursor: pointer;
 }
 
+.items-grid li:hover {
+  opacity: 0.8;
+  background-color: rgba(52, 203, 121, 0.192);
+}
+
 .items-grid li span {
   flex: 1;
   margin-top: 12px;
@@ -199,5 +205,5 @@
 
 .items-grid li.selected {
   background: #E1FAEC;
-  border: 2px solid #34CB79;
+  border: 2px solid #34cb79;
 }

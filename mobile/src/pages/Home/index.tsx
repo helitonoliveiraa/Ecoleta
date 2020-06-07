@@ -37,7 +37,8 @@ const Home: React.FC = () => {
             style={styles.input}
             placeholder="Digite a UF"
             maxLength={2}
-            // autoCapitalize="characters"
+            autoCapitalize="characters"
+            autoFocus={true}
             autoCorrect={false}
             value={uf}
             onChangeText={setUf} // onChangeText={text => setUf(text)}
@@ -46,6 +47,7 @@ const Home: React.FC = () => {
           <TextInput 
             style={styles.input}
             placeholder="Digite a Cidade"
+            autoCapitalize="characters"
             value={city}
             autoCorrect={false}
             onChangeText={setCity}
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#34CB79',
+    backgroundColor: '#D4B300',
     height: 60,
     flexDirection: 'row',
     borderRadius: 10,
@@ -123,6 +125,8 @@ const styles = StyleSheet.create({
   buttonIcon: {
     height: 60,
     width: 60,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     justifyContent: 'center',
     alignItems: 'center'

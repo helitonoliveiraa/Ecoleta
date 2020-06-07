@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Zonedrop = styled.div`
   height: 300px;
-  background: #e1faec;
+  background: rgba(235, 225, 174, 0.26);
   border-radius: 10px;
 
   display: flex;

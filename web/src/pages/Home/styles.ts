@@ -53,9 +53,11 @@ export const Content = styled.div`
       overflow: hidden;
 
       margin-top: 40px;
+      transition: opacity 0.2s;
 
       &:hover {
-        background: #2fb86e;
+        /* background: '#07277B'; */
+        opacity: 0.88;
       }
     }
 
