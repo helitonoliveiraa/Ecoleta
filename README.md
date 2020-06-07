@@ -4,7 +4,9 @@
 
 <h2 align="center">🌎 Ecoleta 🌎</h2>
 
-<img src="./.github/ecoleta.gif" alt="demo" />
+<p align="center">
+  <img src="./.github/ecoleta.gif" alt="demo" />
+</p>
 
 ---
 
